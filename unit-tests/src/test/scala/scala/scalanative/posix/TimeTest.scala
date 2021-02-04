@@ -2,6 +2,7 @@ package scala.scalanative.posix
 
 import org.junit.Test
 import org.junit.Assert._
+import org.junit.Assume._
 
 import scala.scalanative.unsafe._
 import scala.scalanative.unsigned._
@@ -38,6 +39,9 @@ class TimeTest {
   }
 
   @Test def localtimeShouldTransformTheEpochToLocaltime(): Unit = {
+    assumeFalse(
+      "Skipping localtime test since FreeBSD hasn't the 'timezone' variable",
+      System.getProperty("os.name").equals("FreeBSD"))
     val time_ptr = stackalloc[time_t]
     !time_ptr = epoch + timezone
     val time: Ptr[tm] = localtime(time_ptr)
@@ -48,6 +52,9 @@ class TimeTest {
   }
 
   @Test def localtime_rShouldTransformTheEpochToLocaltime(): Unit = {
+    assumeFalse(
+      "Skipping localtime test since FreeBSD hasn't the 'timezone' variable",
+      System.getProperty("os.name").equals("FreeBSD"))
     Zone { implicit z =>
       val time_ptr = stackalloc[time_t]
       !time_ptr = epoch + timezone

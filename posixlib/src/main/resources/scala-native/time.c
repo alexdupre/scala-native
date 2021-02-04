@@ -93,6 +93,18 @@ size_t scalanative_strftime(char *buf, size_t maxsize, const char *format,
 
 char **scalanative_tzname() { return tzname; }
 
-long scalanative_timezone() { return timezone; }
+long scalanative_timezone() {
+#if !defined(__FreeBSD__)
+  return timezone;
+#else
+  return 0;
+#endif
+}
 
-int scalanative_daylight() { return daylight; }
+int scalanative_daylight() {
+#if !defined(__FreeBSD__)
+  return daylight;
+#else
+  return 0;
+#endif
+}
